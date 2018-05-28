@@ -90,14 +90,15 @@ int main() {
 
     if (opcion==2) {
       int index;
-      lastDeleted = index;
       if (lastDeleted != -1){
         // Se inserta el índice del registro eliminado al principio de la lista
         availList.push_back(to_string(index));
       }
       cout <<"Cual registro desea eliminar: ";
       cin >> index;
-      string temp = "*" + to_string(index) + "*";
+      string temp = "*" + to_string(lastDeleted) + "*";
+      lastDeleted = index;
+
       index*=113;
       fstream file;
       char c;
@@ -309,7 +310,7 @@ void check(string archivo){
 
 void escribirArchivo(string ruta, int lastDeleted){
   fstream file;
-  file.open(ruta, ios::out | ios::in);
+  file.open(ruta, ios::out | ios::in );
   if (file.is_open()) {
     file.seekp(0, ios::beg);
     string temp = to_string(lastDeleted);
@@ -321,4 +322,40 @@ void escribirArchivo(string ruta, int lastDeleted){
     file.close();
   }
   file.close();
+}
+
+vector<int> construirAvailList(int posicion, string ruta){
+  if (posicion != -1)​ {
+    availList.push_back(posicion) //Añadir la posición actual al availList
+    string buffer = "";
+    string nextPos = "";
+    //Toma el registro en índice “posición”
+    fstream archivo;
+    archivo.open(ruta, ios::in | ios::out);
+    archivo.seekp(0, ios::beg);
+    getline(archivo, buffer);
+    for (int i = 1; i < buffer.size() ; i++){
+      if(buffer[i] != '*'){
+            nextPos += buffer[i];
+      }
+    }
+  }
+}
+
+void metodo(string ruta){
+  fstream archivo;
+  buffer="";
+  archivo.open(ruta, ios::in | ios::out);
+  archivo.seekp(0, ios::beg);
+  getline(archivo, buffer);
+  if ( buffer != "-1**" )​ {
+    string firstPos = "";
+    //Quitar los espacios del Meta
+    for (int i = 1; i < buffer.size() ; i++){
+      if(buffer[i] != '*'){
+        firstPos += buffer[i];
+      }
+    }
+    vector<int> temp = construirAvailList(firstPos.toInteger());
+  }
 }
